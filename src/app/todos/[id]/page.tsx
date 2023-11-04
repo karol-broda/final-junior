@@ -3,13 +3,13 @@ import {todos} from "@/models/schema";
 import db from "@/models/db";
 import {eq} from "drizzle-orm";
 import {DeleteForm} from "@/components/DeleteTodoForm";
-
+import {redirect} from "next/navigation";
 
 export default async function Page({params}: { params: { id: string } }) {
     try {
-        const byId = Number(params.id)
-        console.log(byId)
-        console.log(typeof byId)
+        const byId = Number(params.id);
+        console.log(byId);
+        console.log(typeof byId);
         const todosDb = db
             .select({
                 id: todos.id,
@@ -19,31 +19,29 @@ export default async function Page({params}: { params: { id: string } }) {
                 status: todos.status
             })
             .from(todos)
-            .where(eq(todos.id, byId))
-        const dbRequest = await todosDb
+            .where(eq(todos.id, byId));
+        const todosArray = await todosDb;
+        const dbRequest = todosArray[0];
+        // @ts-ignore
         return (
-            <div className="p-2">
-                <h1 className="m-1">ToDo</h1>
-                <div className="flex flex-wrap gap-3.5">
-                    <Card
-                        key={dbRequest[0].id}
-                        title={dbRequest[0].title}
-                        status={dbRequest[0].status}
-                        description={dbRequest[0].description}
-                        creation_date={dbRequest[0].creation_date}
-                    />
-                    <DeleteForm
-                        id={dbRequest[0].id}
-                        todo={dbRequest[0].title}
-                    />
+            <main className="bg-gray-100 min-h-screen p-4">
+                <div className="container mx-auto p-4 bg-white rounded-lg shadow-lg">
+                    <h1 className="text-2xl font-bold mb-4 text-center">ToDo</h1>
+                    <div className="flex flex-wrap gap-4">
+                        <div key={dbRequest.id} className="card p-4 bg-gray-50 rounded-md shadow w-full">
+                            <h1 className="text-xl font-semibold mb-2">{dbRequest.title}</h1>
+                            <p className="mb-1">Status: {dbRequest.status}</p>
+                            <p className="mb-1">Description: {dbRequest.description}</p>
+                            <p className="mb-1">Creation Date: {dbRequest.creation_date.toLocaleDateString()}</p>
+                            <DeleteForm id={dbRequest.id} />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        )
+            </main>
+        );
+
     } catch (error) {
-        console.error(error)
-        return <div>
-            <h1>Something went wrong</h1>
-            <p>{String(error)}</p>
-        </div>
+        console.error(error);
+        redirect("/todos");
     }
 }
