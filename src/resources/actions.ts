@@ -4,8 +4,8 @@ import db from "@/models/db";
 import { todos } from "@/models/schema";
 import { insertToDoSchema } from "@/models/schema";
 import { revalidatePath } from "next/cache";
-import {eq} from "drizzle-orm";
-import {redirect} from "next/navigation";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 export async function createTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
@@ -32,8 +32,7 @@ export async function createTodo(prevState: any, formData: FormData) {
         const dbRequest = await todosDb;
         revalidatePath('/todos/newTodo');
         console.log(JSON.stringify(dbRequest));
-        redirect("/todos")
-        return { message: `Added todo ${dbRequest[0].title}}` }
+        redirect(`/todos/${dbRequest[0].id}`);
     } catch (e) {
         return { message: 'Failed to create todo' }
     }
