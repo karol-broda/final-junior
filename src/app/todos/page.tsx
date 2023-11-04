@@ -1,6 +1,8 @@
 import Card from "@/components/Card";
 import {todos} from "@/models/schema";
 import db from "@/models/db";
+import Link from "next/link";
+import {DeleteForm} from "@/components/DeleteTodoForm";
 
 export default async function Page() {
     const todosDb = db
@@ -15,21 +17,23 @@ export default async function Page() {
     try {
         const dbRequest = await todosDb
         return (
-            <div className="p-2">
-                <h1>ToDos</h1>
+                <main>
+                <h1 className="m-1">All Todos</h1>
                 <div className="flex flex-wrap gap-3.5">
-                {dbRequest.map((todo) => (
-                    <Card
-                        key={todo.id}
-                        title={todo.title}
-                        status={todo.status}
-                        id={todo.id}
-                        description={todo.description}
-                        creation_date={todo.creation_date}
-                    />
-                ))}
+                    {dbRequest.map((todo) => (
+                        <div key={todo.id} className="m-4">
+                            <Link href={`/todos/${todo.id}`}>
+                                    <Card
+                                        title={todo.title}
+                                        status={todo.status}
+                                        description={todo.description}
+                                        creation_date={todo.creation_date}
+                                    />
+                            </Link>
+                        </div>
+                    ))}
                 </div>
-            </div>
+                </main>
         )
     } catch (error) {
         console.error(error)

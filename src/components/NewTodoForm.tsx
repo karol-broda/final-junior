@@ -1,13 +1,12 @@
 'use client'
 
 // @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom'
+import { useFormState } from 'react-dom'
 import { useFormStatus } from "react-dom";
-import { createTodo } from "@/app/todos/newTodo/actions";
+import { createTodo } from "@/resources/actions";
 
-const initialState:{id: null | number, error: null | string} = {
-    error: null,
-    id: null
+const initialState = {
+    message: null
 }
 
 function SubmitButton() {
@@ -15,7 +14,7 @@ function SubmitButton() {
 
     return (
         <div className="mt-6">
-            <button aria-disabled={pending} type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Add Todo</button>
+            <button aria-disabled={pending} type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300 disabled:hover:bg-blue-300">Add Todo</button>
         </div>
     )
 }
@@ -24,6 +23,7 @@ export default function NewTodoForm() {
     const [state, formAction] = useFormState(createTodo, initialState)
 
     return (
+        <div>
         <form id="todoForm" action={formAction}>
             <div className="mb-4">
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>
@@ -41,10 +41,10 @@ export default function NewTodoForm() {
                 </select>
             </div>
             <SubmitButton />
-            <p aria-live="polite" className={state?.error ? "sr-only" : "sr-only invisible"} role="status">
-                {state?.error}
+            <p aria-live="polite" className="sr-only" role="status">
+                {state?.message}
             </p>
         </form>
-
+        </div>
     )
 }
