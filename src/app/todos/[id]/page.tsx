@@ -1,49 +1,48 @@
-import Card from "@/components/Card";
-import {todos} from "@/models/schema";
-import db from "@/models/db";
-import {eq} from "drizzle-orm";
-import {DeleteForm} from "@/components/DeleteTodoForm";
+'use client'
 
+import { DeleteForm } from "@/components/DeleteTodoForm";
+import { redirect } from "next/navigation";
+import { UpdateForm } from "@/components/ChangeTodoForm";
+import {useEffect, useState} from "react";
 
-export default async function Page({params}: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
     try {
-        const byId = Number(params.id)
-        console.log(byId)
-        console.log(typeof byId)
-        const todosDb = db
-            .select({
-                id: todos.id,
-                title: todos.title,
-                description: todos.description,
-                creation_date: todos.creation_date,
-                status: todos.status
-            })
-            .from(todos)
-            .where(eq(todos.id, byId))
-        const dbRequest = await todosDb
+        const [todo, setTodo] = useState({} as any);
+        const [edit, setEdit] = useState(false);
+        const byId = Number(params.id);
+        useEffect(()=>{
+            fetch(`/api/todos/${byId}`)
+                .then(res => res.json())
+                .then(data => setTodo(data))
+                .then((json) => setTodo(json))
+                .catch(err => console.error(err))
+        }, [])
         return (
             <div className="p-2">
-                <h1 className="m-1">ToDo</h1>
-                <div className="flex flex-wrap gap-3.5">
-                    <Card
-                        key={dbRequest[0].id}
-                        title={dbRequest[0].title}
-                        status={dbRequest[0].status}
-                        description={dbRequest[0].description}
-                        creation_date={dbRequest[0].creation_date}
-                    />
-                    <DeleteForm
-                        id={dbRequest[0].id}
-                        todo={dbRequest[0].title}
-                    />
+                <div className="flex flex-wrap gap-3.5 justify-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+                        {!edit ? <>
+                                <h2 className="text-xl font-bold mb-2">{todo.title}</h2><p
+                                className="text-gray-700 mb-2">{todo.description}</p>
+                                {/* @ts-ignore */}
+                                <p className="text-gray-500">Created on: {todo.creation_date.toLocaleDateString()}</p>
+                                <p className="text-green-500">{todo.status}</p>
+                            </>
+                            :
+                            <UpdateForm todo={todo}/>
+                        }
+                        <p onClick={() => setEdit(!edit)}>Toggle Edit</p>
+
+                        <DeleteForm
+                            id={todo.id}
+                            todo={todo.title}
+                        />
+                    </div>
                 </div>
             </div>
-        )
+        );
     } catch (error) {
-        console.error(error)
-        return <div>
-            <h1>Something went wrong</h1>
-            <p>{String(error)}</p>
-        </div>
+        console.error(error);
+        redirect("/todos");
     }
 }

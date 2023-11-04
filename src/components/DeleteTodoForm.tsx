@@ -10,18 +10,18 @@ const initialState = {
 function DeleteButton() {
     const { pending } = useFormStatus()
     return (
-        <button type="submit" aria-disabled={pending}>
+        <button className="bg-red-600 p-2 rounded-2xl" type="submit" aria-disabled={pending}>
             Delete
         </button>
     )
 }
 
+// @ts-ignore
 export function DeleteForm({ id }) {
     const [state, formAction] = useFormState(deleteTodo, initialState)
-    const numId = parseInt(id,10)
     return (
         <form action={formAction}>
-            <input type="hidden" name="id" value={numId} />
+            <input type="hidden" name="id" value={id} />
             <DeleteButton />
             <p aria-live="polite" className="sr-only" role="status">
                 {state?.message}
