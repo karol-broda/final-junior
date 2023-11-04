@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server';
 import db from "@/models/db";
 import {todos} from "@/models/schema";
-import {NextApiRequest, NextApiResponse} from "next";
 import {eq} from "drizzle-orm";
 
 export async function GET(

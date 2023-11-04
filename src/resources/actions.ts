@@ -47,6 +47,7 @@ export async function deleteTodo(prevState: any, formData: FormData) {
     try {
         const todosDb = db
             .delete(todos)
+            //@ts-ignore
             .where(eq(data.id,todos.id))
             .returning({
                 title: todos.title
@@ -78,6 +79,7 @@ export async function updateTodo(prevState: any, formData: FormData) {
                 description: data.description,
                 status: data.status
             })
+            //@ts-ignore
             .where(eq(data.id,todos.id))
             .returning({
                 id: todos.id,

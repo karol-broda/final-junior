@@ -1,9 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 import db from "@/models/db";
 import {todos} from "@/models/schema";
-import {NextApiRequest, NextApiResponse} from "next";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: Request) {
     try {
         const todosDb   = await db
             .select({
