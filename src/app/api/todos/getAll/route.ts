@@ -17,6 +17,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
         return NextResponse.json({ data: todosDb }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: error }, { status: 500 });
     }
 }
