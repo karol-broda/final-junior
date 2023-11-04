@@ -14,7 +14,6 @@ export default async function Page({ params }: { params: { id: string } }) {
             fetch(`/api/todos/${byId}`)
                 .then(res => res.json())
                 .then(data => setTodo(data))
-                .then((json) => setTodo(json))
                 .catch(err => console.error(err))
         }, [])
         return (
