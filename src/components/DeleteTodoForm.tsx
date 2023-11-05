@@ -10,7 +10,7 @@ const initialState = {
 function DeleteButton() {
     const { pending } = useFormStatus()
     return (
-        <button className="bg-red-600 p-2 rounded-2xl" type="submit" aria-disabled={pending}>
+        <button className="bg-red-600 p-2 rounded-2xl" type="submit" disabled={pending}>
             Delete
         </button>
     )
@@ -23,9 +23,6 @@ export function DeleteForm({ id }) {
         <form action={formAction}>
             <input type="hidden" name="id" value={id} />
             <DeleteButton />
-            <p aria-live="polite" className="sr-only" role="status">
-                {state?.message}
-            </p>
         </form>
     )
 }

@@ -14,7 +14,7 @@ function SubmitButton() {
 
     return (
         <div className="mt-6">
-            <button aria-disabled={pending} type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300 disabled:hover:bg-blue-300">Add Todo</button>
+            <button disabled={pending} type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300 disabled:hover:bg-blue-300">Add Todo</button>
         </div>
     )
 }
@@ -41,9 +41,6 @@ export default function NewTodoForm() {
                 </select>
             </div>
             <SubmitButton />
-            <p aria-live="polite" className="sr-only" role="status">
-                {state?.message}
-            </p>
         </form>
         </div>
     )

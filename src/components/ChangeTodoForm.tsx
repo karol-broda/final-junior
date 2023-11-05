@@ -13,7 +13,7 @@ const initialState = {
 function UpdateButton() {
     const { pending } = useFormStatus()
     return (
-        <button className="bg-green-600 p-2 rounded-2xl" type="submit" aria-disabled={pending}>
+        <button className="bg-green-600 p-2 rounded-2xl" type="submit" disabled={pending}>
             Update
         </button>
     )
@@ -46,9 +46,6 @@ export function UpdateForm({todo}: { todo: ToDo }) {
                 </select>
             </div>
             <UpdateButton />
-            <p aria-live="polite" className="sr-only" role="status">
-                {state?.message}
-            </p>
         </form>
     )
 }
