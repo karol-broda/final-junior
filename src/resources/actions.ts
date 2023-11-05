@@ -1,11 +1,10 @@
 'use server'
 
 import db from "@/models/db";
-import { todos } from "@/models/schema";
-import { insertToDoSchema } from "@/models/schema";
-import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
+import {insertToDoSchema, todos} from "@/models/schema";
+import {revalidatePath} from "next/cache";
+import {eq} from "drizzle-orm";
+import {redirect, RedirectType} from "next/navigation";
 
 export async function createTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
@@ -13,7 +12,8 @@ export async function createTodo(prevState: any, formData: FormData) {
         title: formData.get('title'),
         description: formData.get('description'),
         status: formData.get('status')
-    })
+    });
+    let dbRequest;
     try {
         const todosDb = db
             .insert(todos)
@@ -29,14 +29,15 @@ export async function createTodo(prevState: any, formData: FormData) {
                 status: todos.status
             });
 
-        const dbRequest = await todosDb;
+        dbRequest = await todosDb;
         revalidatePath('/todos/newTodo');
         console.log(JSON.stringify(dbRequest));
-        redirect(`/todos/${dbRequest[0].id}`);
     } catch (e) {
         return { message: 'Failed to create todo' }
     }
+    redirect(`/todos/${dbRequest[0].id}`, RedirectType.replace);
 }
+
 
 export async function deleteTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
@@ -112,5 +113,28 @@ export async function getTodoById(id: number) {
         return { data: dbRequest[0] }
     } catch (error) {
         return { message: 'Failed to get todo' }
+    }
+}
+
+export async function changeTodoStatus(id: number, currentStatus: "DONE" | "PENDING") {
+    const newStatus = currentStatus === "DONE" ? "PENDING" : "DONE";
+    try {
+        const todosDb = db
+            .update(todos)
+            .set({
+                status: newStatus
+            })
+            .where(eq(todos.id, id))
+            .returning({
+                id: todos.id,
+                status: todos.status
+            });
+
+        const dbRequest = await todosDb;
+        revalidatePath(`/todos/${id}`);
+        console.log(JSON.stringify(dbRequest));
+        return { message: `Updated todo status to ${dbRequest[0].status}` };
+    } catch (e) {
+        return { message: 'Failed to update todo status' };
     }
 }
