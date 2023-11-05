@@ -23,7 +23,7 @@ export default function Card({title, description, creation_date , status}: CardP
                     {description}
                 </p>
                 <p className="mt-2 text-gray-700">
-                    Created on: {creation_date?.toLocaleDateString() ?? "No date"}
+                    Created on: {creation_date?.toLocaleDateString("de-DE") ?? "No date"}
                 </p>
             </div>
         </div>

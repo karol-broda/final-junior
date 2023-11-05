@@ -31,7 +31,6 @@ export default async function Page() {
         const dbRequestDone = await todosDbDone
         return (
                 <main>
-                <h1 className="m-1">All Todos</h1>
                 <div className="flex flex-wrap gap-3.5">
                     {dbRequest.map((todo) => (
                         <div key={todo.id} className="m-4">
