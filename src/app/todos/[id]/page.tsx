@@ -33,8 +33,7 @@ export default async function Page({params}: { params: { id: string } }) {
                                 <h1 className="text-xl font-semibold mb-2">{dbRequest.title}</h1>
                                 <p className="mb-1">Status: {dbRequest.status}</p>
                                 <p className="mb-1">Description: {dbRequest.description}</p>
-                                {/* @ts-ignore */}
-                                <p className="mb-1">Creation Date: {dbRequest.creation_date.toLocaleDateString()}</p>
+                                <p className="mb-1">Creation Date: {dbRequest.creation_date!.toLocaleDateString()}</p>
                                 <TodoCheckbox id={dbRequest.id} initialStatus={dbRequest.status} />
 
                             </div>

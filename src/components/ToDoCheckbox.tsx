@@ -9,8 +9,7 @@ export default function TodoCheckbox({ id, initialStatus }: { id: number, initia
     const [status, setStatus] = useState(initialStatus);
 
     const handleStatusChange = async () => {
-        // @ts-ignore
-        const response = await changeTodoStatus(id, status);
+        const response = await changeTodoStatus(id, status as "DONE" | "PENDING");
         if (response.message.includes('Updated')) {
             setStatus(status === "DONE" ? "PENDING" : "DONE");
         } else {

@@ -1,4 +1,3 @@
-//@ts-nocheck
 'use client'
 
 import {useFormState, useFormStatus} from 'react-dom'
@@ -27,14 +26,14 @@ export function UpdateForm({todo}: { todo: ToDo }) {
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>
                 <input type="text" id="title" name="title"
                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                       value={todo.title}
+                       value={todo.title as string}
                        />
             </div>
             <div className="mb-4">
                 <label htmlFor="description" className="block text-gray-600 font-medium">Description</label>
                 <textarea id="description" name="description"
                           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 rows-4"
-                value={todo.description}></textarea>
+                value={todo.description as string}></textarea>
             </div>
             <div className="mb-4">
                 <label htmlFor="status" className="block text-gray-600 font-medium">Status</label>

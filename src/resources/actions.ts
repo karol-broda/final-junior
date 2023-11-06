@@ -42,14 +42,13 @@ export async function createTodo(prevState: any, formData: FormData) {
 export async function deleteTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
     const data = schema.parse({
-        id: parseInt(<string>formData.get('id'),10),
+        id: parseInt(formData.get('id') as string,10),
         todo: formData.get('todo')
     })
     try {
         const todosDb = db
             .delete(todos)
-            //@ts-ignore
-            .where(eq(data.id,todos.id))
+            .where(eq(todos.id,data.id as number))
             .returning({
                 title: todos.title
             })
@@ -80,8 +79,7 @@ export async function updateTodo(prevState: any, formData: FormData) {
                 description: data.description,
                 status: data.status
             })
-            //@ts-ignore
-            .where(eq(data.id,todos.id))
+            .where(eq(todos.id,data.id as number))
             .returning({
                 id: todos.id,
                 title: todos.title

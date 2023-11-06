@@ -16,8 +16,7 @@ function DeleteButton() {
     )
 }
 
-// @ts-ignore
-export function DeleteForm({ id }) {
+export function DeleteForm({ id }: { id: number }) {
     const [state, formAction] = useFormState(deleteTodo, initialState)
     return (
         <form action={formAction}>
