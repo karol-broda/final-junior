@@ -5,13 +5,13 @@ import {eq} from "drizzle-orm";
 import {DeleteForm} from "@/components/DeleteTodoForm";
 import {redirect} from "next/navigation";
 import TodoCheckbox from "@/components/ToDoCheckbox";
+import Link from "next/link";
 
 export default async function Page({params}: { params: { id: string } }) {
-    try {
         const byId = Number(params.id);
         console.log(byId);
         console.log(typeof byId);
-        const todosDb = db
+        const todosDb = await db
             .select({
                 id: todos.id,
                 title: todos.title,
@@ -21,8 +21,7 @@ export default async function Page({params}: { params: { id: string } }) {
             })
             .from(todos)
             .where(eq(todos.id, byId));
-        const todosArray = await todosDb;
-        const dbRequest = todosArray[0];
+        const dbRequest = todosDb[0];
         return (
             <main className="bg-gray-100 min-h-screen p-4">
                 <div className="container mx-auto p-4 bg-white rounded-lg shadow-lg">
@@ -40,13 +39,14 @@ export default async function Page({params}: { params: { id: string } }) {
                             <div className="flex items-center space-x-4">
                                 <DeleteForm id={dbRequest.id} />
                             </div>
+                            <div className="bg-teal-500 p-2 rounded-2xl">
+                                <Link href={`/todos/${dbRequest.id}/edit`}>
+                                    Edit
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
         );
-    } catch (error) {
-        console.error(error);
-        redirect("/todos");
-    }
 }

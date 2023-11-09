@@ -21,19 +21,20 @@ function UpdateButton() {
 export function UpdateForm({todo}: { todo: ToDo }) {
     const [state, formAction] = useFormState(updateTodo, initialState)
     return (
-        <form>
+        <form action={formAction} id="updateForm">
+            <input type="hidden" name="id" value={parseInt(todo.id.toString(),10)} />
             <div className="mb-4">
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>
                 <input type="text" id="title" name="title"
                        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                       value={todo.title as string}
+                       defaultValue={todo.title as string}
                        />
             </div>
             <div className="mb-4">
                 <label htmlFor="description" className="block text-gray-600 font-medium">Description</label>
                 <textarea id="description" name="description"
                           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 rows-4"
-                value={todo.description as string}></textarea>
+                          defaultValue={todo.description as string}></textarea>
             </div>
             <div className="mb-4">
                 <label htmlFor="status" className="block text-gray-600 font-medium">Status</label>

@@ -13,3 +13,5 @@ export const todos = pgTable('todos', {
 });
 
 export const insertToDoSchema = createInsertSchema(todos);
+export type SelectedTodo = typeof todos.$inferSelect;
+export type InsertedTodo = typeof todos.$inferInsert;

@@ -23,6 +23,7 @@ export default function NewTodoForm() {
 
     return (
         <div>
+            {/*@ts-expect-error*/}
         <form id="todoForm" action={formAction}>
             <div className="mb-4">
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>

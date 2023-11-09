@@ -66,13 +66,12 @@ export async function deleteTodo(prevState: any, formData: FormData) {
 export async function updateTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
     const data = schema.parse({
-        id: parseInt(<string>formData.get('id'),10),
+        id: parseInt(formData.get('id').toString(),10),
         status: formData.get('status'),
         title: formData.get('title'),
         description: formData.get('description')
     })
-    try {
-        const todosDb = db
+        const todosDb = await db
             .update(todos)
             .set({
                 title: data.title,
@@ -85,13 +84,9 @@ export async function updateTodo(prevState: any, formData: FormData) {
                 title: todos.title
             })
 
-        const dbRequest = await todosDb;
-        revalidatePath(`/todos/${data.id}`);
-        console.log(JSON.stringify(dbRequest));
-        return { message: `Updated todo ${dbRequest[0].title}}` }
-    } catch (e) {
-        return { message: 'Failed to Update todo' }
-    }
+        revalidatePath(`/todos/edit/${data.id}`);
+        console.log(JSON.stringify(todosDb));
+        redirect(`/todos/${data.id}`)
 }
 
 export async function getTodoById(id: number) {
@@ -117,7 +112,7 @@ export async function getTodoById(id: number) {
 export async function changeTodoStatus(id: number, currentStatus: "DONE" | "PENDING") {
     const newStatus = currentStatus === "DONE" ? "PENDING" : "DONE";
     try {
-        const todosDb = db
+        const todosDb = await db
             .update(todos)
             .set({
                 status: newStatus
@@ -128,10 +123,9 @@ export async function changeTodoStatus(id: number, currentStatus: "DONE" | "PEND
                 status: todos.status
             });
 
-        const dbRequest = await todosDb;
         revalidatePath(`/todos/${id}`);
-        console.log(JSON.stringify(dbRequest));
-        return { message: `Updated todo status to ${dbRequest[0].status}` };
+        console.log(JSON.stringify(todosDb));
+        return { message: `Updated todo ${todosDb[0].id} status to ${todosDb[0].status}` };
     } catch (e) {
         return { message: 'Failed to update todo status' };
     }
