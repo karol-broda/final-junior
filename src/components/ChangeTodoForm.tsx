@@ -13,7 +13,7 @@ const initialState = {
 function UpdateButton() {
     const { pending } = useFormStatus()
     return (
-        <button className="bg-green-600 p-2 rounded-2xl" type="submit" disabled={pending}>
+        <button className="bg-green-600 p-2 rounded-2xl disabled:bg-green-300" type="submit" disabled={pending}>
             Update
         </button>
     )
