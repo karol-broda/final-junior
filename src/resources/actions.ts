@@ -66,12 +66,12 @@ export async function deleteTodo(prevState: any, formData: FormData) {
 export async function updateTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
     const data = schema.parse({
-        id: parseInt(formData.get('id').toString(),10),
+        id: formData.get('id') ? parseInt(formData.get('id').toString(), 10) : 0, // Default value of 0 if null
         status: formData.get('status'),
         title: formData.get('title'),
         description: formData.get('description')
-    })
-        const todosDb = await db
+    });
+    const todosDb = await db
             .update(todos)
             .set({
                 title: data.title,
