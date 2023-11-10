@@ -4,6 +4,7 @@ import {useFormState, useFormStatus} from 'react-dom'
 import {updateTodo} from '@/resources/actions'
 import ToDo from "@/resources/toDoInterface";
 import {useState} from "react";
+import { insertToDoSchema } from "@/models/schema";
 
 const initialState = {
     message: null,
@@ -20,9 +21,16 @@ function UpdateButton() {
 
 export function UpdateForm({todo}: { todo: ToDo }) {
     const [state, formAction] = useFormState(updateTodo, initialState)
+    const schema = insertToDoSchema
+    const parse = schma.parse({
+        id: todo.id,
+        title: todo.title,
+        description: todo.description,
+        status: todo.status
+})
     return (
         <form action={formAction} id="updateForm">
-            <input type="hidden" name="id" value={parseInt(todo.id.toString(),10)} />
+            <input type="hidden" name="id" value={parseInt(parse.id.toString(),10)} />
             <div className="mb-4">
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>
                 <input type="text" id="title" name="title"
