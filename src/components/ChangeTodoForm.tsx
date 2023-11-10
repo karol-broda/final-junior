@@ -30,7 +30,7 @@ export function UpdateForm({todo}: { todo: ToDo }) {
 })
     return (
         <form action={formAction} id="updateForm">
-            <input type="hidden" name="id" value={parseInt(parse.id as string ,10)} />
+            <input type="hidden" name="id" value={parseInt(parse.id as unknown as string ,10)} />
             <div className="mb-4">
                 <label htmlFor="title" className="block text-gray-600 font-medium">Title</label>
                 <input type="text" id="title" name="title"
