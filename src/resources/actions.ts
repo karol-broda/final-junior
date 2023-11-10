@@ -7,8 +7,7 @@ import {eq} from "drizzle-orm";
 import {redirect, RedirectType} from "next/navigation";
 
 export async function createTodo(prevState: any, formData: FormData) {
-    const schema = insertToDoSchema;
-    const data = schema.parse({
+    const data = insertToDoSchema.parse({
         title: formData.get('title'),
         description: formData.get('description'),
         status: formData.get('status')
@@ -40,8 +39,7 @@ export async function createTodo(prevState: any, formData: FormData) {
 
 
 export async function deleteTodo(prevState: any, formData: FormData) {
-    const schema = insertToDoSchema;
-    const data = schema.parse({
+    const data = insertToDoSchema.parse({
         id: parseInt(formData.get('id') as string,10),
         todo: formData.get('todo')
     })
@@ -65,12 +63,16 @@ export async function deleteTodo(prevState: any, formData: FormData) {
 
 export async function updateTodo(prevState: any, formData: FormData) {
     const schema = insertToDoSchema;
+    const idValue = formData.get('id');
+    const parsedId = idValue ? parseInt(idValue.toString(), 10) : 0;
+
     const data = schema.parse({
-        id: formData.get('id') ? parseInt(formData.get('id').toString(), 10) : 0, // Default value of 0 if null
+        id: parsedId,
         status: formData.get('status'),
         title: formData.get('title'),
         description: formData.get('description')
     });
+
     const todosDb = await db
             .update(todos)
             .set({
